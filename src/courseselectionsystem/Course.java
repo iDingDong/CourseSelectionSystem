@@ -42,6 +42,31 @@ public class Course {
 		return m_id;
 	}
 	
+	public Teacher get_teacher() {
+		int result = -1;
+		String sql =
+			"SELECT teacher_id FROM courses WHERE course_id = " + get_id()
+		;
+		try {
+			java.sql.ResultSet sql_result =
+				CourseSelectionSystem.get_statement().executeQuery(sql)
+			;
+			try {
+				if (sql_result.next()) {
+					result = sql_result.getInt(1);
+				}
+			} finally {
+				sql_result.close();
+			}
+		} catch (SQLException ex) {
+			CourseSelectionSystem.send_message("Unable to inquire.");
+		}
+		if (result == -1) {
+			System.exit(-1);
+		}
+		return new Teacher(result);
+	}
+	
 	public List<Student> get_students() {
 		List<Student> result = new ArrayList<Student>();
 		String sql =
@@ -51,8 +76,12 @@ public class Course {
 			java.sql.ResultSet sql_result =
 				CourseSelectionSystem.get_statement().executeQuery(sql)
 			;
-			while (sql_result.next()) {
-				result.add(new Student(sql_result.getInt(1)));
+			try {
+				while (sql_result.next()) {
+					result.add(new Student(sql_result.getInt(1)));
+				}
+			} finally {
+				sql_result.close();
 			}
 		} catch (SQLException ex) {
 			CourseSelectionSystem.send_message("Unable to inquire.");
