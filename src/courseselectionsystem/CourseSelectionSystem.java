@@ -8,6 +8,7 @@ package courseselectionsystem;
 import java.sql.SQLException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.util.List;
 
 /**
  *
@@ -27,12 +28,21 @@ public class CourseSelectionSystem {
 	 * @param args the command line arguments
 	 */
 	public static void main(String[] args) {
+		System.out.println("begin");
 		try {
+			Class.forName("com.mysql.jdbc.Driver");
 			s_connection = java.sql.DriverManager.getConnection(
 				"jdbc:mysql://localhost:3306/course_selection?" +
 				"user=root&password=&useUnicode=true&characterEncoding=UTF8"
 			);
 			s_statement = s_connection.createStatement();
+			try {
+				//TODO: add logic
+			} finally {
+				s_connection.close();
+			}
+		} catch(ClassNotFoundException ex) {
+			send_message("Failed to reach database.");
 		} catch (java.sql.SQLException ex) {
 			send_message("Failed to reach database.");
 		}
