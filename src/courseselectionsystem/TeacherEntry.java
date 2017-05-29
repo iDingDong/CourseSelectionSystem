@@ -16,6 +16,7 @@ public class TeacherEntry {
 	public static class UserInfo {
 		public long id;
 		public String password;
+                public String usertype;
 	}
 	
 	public static class CourseInfo {

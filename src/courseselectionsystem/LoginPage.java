@@ -4,7 +4,12 @@
  * and open the template in the editor.
  */
 package courseselectionsystem;
+//import java.awt.event.*;
 
+import javax.swing.*;
+import javax.swing.SwingUtilities;
+import javax.swing.event.CaretEvent;
+import javax.swing.event.CaretListener;
 /**
  *
  * @author SilentLamb
@@ -16,6 +21,9 @@ public class LoginPage extends javax.swing.JFrame {
      */
     public LoginPage() {
         initComponents();
+        String info1 = "请输入 [账号]";
+ //       TxtUsername.addFocusListener(new MyFocusListener(info1, TxtUsername));
+        TxtUsername.addCaretListener(new TextFieldInputListener());
     }
 
     /**
@@ -29,35 +37,34 @@ public class LoginPage extends javax.swing.JFrame {
 
         jPanel1 = new javax.swing.JPanel();
         MsgLogintype = new javax.swing.JLabel();
-        jComboBox1 = new javax.swing.JComboBox<>();
+        UserType = new javax.swing.JComboBox<>();
         TxtUsername = new javax.swing.JTextField();
         MsgUsername = new javax.swing.JLabel();
         MsgPassword = new javax.swing.JLabel();
-        jPasswordField1 = new javax.swing.JPasswordField();
+        TxtUserpassword = new javax.swing.JPasswordField();
         jButton1 = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setSize(new java.awt.Dimension(400, 300));
 
-        MsgLogintype.setText("MsgLogintype");
+        MsgLogintype.setText("账号类型");
 
-        jComboBox1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "学生", "教师", "管理员" }));
-        jComboBox1.addActionListener(new java.awt.event.ActionListener() {
+        UserType.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "学生", "教师", "管理员" }));
+        UserType.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jComboBox1ActionPerformed(evt);
+                UserTypeActionPerformed(evt);
             }
         });
 
-        TxtUsername.setText("Username");
         TxtUsername.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 TxtUsernameActionPerformed(evt);
             }
         });
 
-        MsgUsername.setText("MsgUsername");
+        MsgUsername.setText("账号");
 
-        MsgPassword.setText("MsgPassword");
+        MsgPassword.setText("密码");
 
         jButton1.setText("登录");
         jButton1.addActionListener(new java.awt.event.ActionListener() {
@@ -70,49 +77,45 @@ public class LoginPage extends javax.swing.JFrame {
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jButton1)
-                .addGap(231, 231, 231))
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGap(31, 31, 31)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel1Layout.createSequentialGroup()
-                        .addComponent(MsgPassword)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(jPasswordField1, javax.swing.GroupLayout.PREFERRED_SIZE, 339, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(MsgUsername)
-                            .addComponent(MsgLogintype))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 98, Short.MAX_VALUE)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(TxtUsername, javax.swing.GroupLayout.PREFERRED_SIZE, 339, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                .addGap(89, 89, 89))
+                .addGap(24, 24, 24)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(MsgLogintype)
+                    .addComponent(MsgUsername)
+                    .addComponent(MsgPassword))
+                .addGap(18, 18, 18)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(TxtUserpassword, javax.swing.GroupLayout.PREFERRED_SIZE, 182, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(TxtUsername, javax.swing.GroupLayout.PREFERRED_SIZE, 182, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(UserType, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(128, Short.MAX_VALUE))
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addGap(140, 140, 140)
+                .addComponent(jButton1)
+                .addGap(0, 0, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGap(225, 225, 225)
+                .addGap(61, 61, 61)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(MsgLogintype)
-                    .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(32, 32, 32)
+                    .addComponent(UserType, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(25, 25, 25)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(TxtUsername, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(TxtUsername, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(MsgUsername))
-                .addGap(63, 63, 63)
+                .addGap(18, 18, 18)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(MsgPassword)
-                    .addComponent(jPasswordField1, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 98, Short.MAX_VALUE)
+                    .addComponent(TxtUserpassword, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(43, 43, 43)
                 .addComponent(jButton1)
-                .addContainerGap())
+                .addContainerGap(47, Short.MAX_VALUE))
         );
 
         TxtUsername.getAccessibleContext().setAccessibleName("TxtUsername");
-        jPasswordField1.getAccessibleContext().setAccessibleName("TxtPassword");
+        TxtUserpassword.getAccessibleContext().setAccessibleName("TxtPassword");
         jButton1.getAccessibleContext().setAccessibleName("LoginSubmit");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -126,15 +129,21 @@ public class LoginPage extends javax.swing.JFrame {
             .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
 
-        pack();
+        setSize(new java.awt.Dimension(416, 339));
+        setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jComboBox1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBox1ActionPerformed
+    private void UserTypeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_UserTypeActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_jComboBox1ActionPerformed
+    }//GEN-LAST:event_UserTypeActionPerformed
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         // TODO add your handling code here:
+        TeacherEntry.UserInfo userinfo = new TeacherEntry.UserInfo();
+        userinfo.id = Long.parseLong(TxtUsername.getText());
+        userinfo.password = String.valueOf(TxtUserpassword.getPassword());
+        userinfo.usertype = UserType.getSelectedItem().toString();
+        
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void TxtUsernameActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_TxtUsernameActionPerformed
@@ -181,9 +190,77 @@ public class LoginPage extends javax.swing.JFrame {
     private javax.swing.JLabel MsgPassword;
     private javax.swing.JLabel MsgUsername;
     private javax.swing.JTextField TxtUsername;
+    private javax.swing.JPasswordField TxtUserpassword;
+    private javax.swing.JComboBox<String> UserType;
     private javax.swing.JButton jButton1;
-    private javax.swing.JComboBox<String> jComboBox1;
     private javax.swing.JPanel jPanel1;
-    private javax.swing.JPasswordField jPasswordField1;
     // End of variables declaration//GEN-END:variables
+}
+/*
+class MyFocusListener implements FocusListener {
+    String info;
+    JTextField jtf;
+    public MyFocusListener(String info, JTextField jtf) {
+        this.info = info;
+        this.jtf = jtf;
+    }
+    @Override
+    public void focusGained(FocusEvent e) {//获得焦点的时候,清空提示文字
+        String temp = jtf.getText();
+        if(temp.equals(info)){
+            jtf.setText("");
+        }
+    }
+    @Override
+    public void focusLost(FocusEvent e) {//失去焦点的时候,判断如果为空,就显示提示文字
+        String temp = jtf.getText();
+        if(temp.equals("")){
+            jtf.setText(info);
+        }
+    }
+}
+*/
+
+class TextFieldInputListener implements CaretListener {
+    //JLabel msglabel;
+    
+    /*
+    public TextFieldInputListener(JLabel label1){
+        msglabel = label1;
+        
+    }
+*/
+ 
+    @Override
+    public void caretUpdate(CaretEvent e) {
+        JTextField textField = (JTextField) e.getSource(); // 获得触发事件的 JTextField
+        String text = textField.getText();
+        if (text.length() == 0) {
+            return;
+        }
+        char ch = text.charAt(text.length() - 1);
+        if (!(ch >= '0' && ch <= '9'  )) {
+            
+            JOptionPane.showMessageDialog(textField, "只能输入数字", "提示", JOptionPane.INFORMATION_MESSAGE);
+            SwingUtilities.invokeLater(new Runnable() {
+                @Override
+                public void run() {
+                    // 去掉 JTextField 中的末尾字符
+                    textField.setText(text.substring(0, text.length() - 1));
+                }
+            });
+            
+        }
+        else if(text.length() > 12){
+            JOptionPane.showMessageDialog(textField, "只能输入12位", "提示", JOptionPane.INFORMATION_MESSAGE);
+            SwingUtilities.invokeLater(new Runnable() {
+                @Override
+                public void run() {
+                    // 去掉 JTextField 中的末尾字符
+                    textField.setText(text.substring(0, text.length() - 1));
+                }
+            });
+        }
+    }
+ 
 }
