@@ -14,8 +14,9 @@ import java.util.ArrayList;
  */
 public class TeacherEntry {
 	public static class UserInfo {
-		public int id;
+		public long id;
 		public String password;
+                public String usertype;
 	}
 	
 	public static class CourseInfo {
