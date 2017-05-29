@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package courseselectionsystem;
+package courseselectionUI;
 //import java.awt.event.*;
 
 import javax.swing.*;
@@ -25,6 +25,8 @@ public class LoginPage extends javax.swing.JFrame {
  //       TxtUsername.addFocusListener(new MyFocusListener(info1, TxtUsername));
         TxtUsername.addCaretListener(new TextFieldInputListener());
     }
+    
+
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -36,8 +38,6 @@ public class LoginPage extends javax.swing.JFrame {
     private void initComponents() {
 
         jPanel1 = new javax.swing.JPanel();
-        MsgLogintype = new javax.swing.JLabel();
-        UserType = new javax.swing.JComboBox<>();
         TxtUsername = new javax.swing.JTextField();
         MsgUsername = new javax.swing.JLabel();
         MsgPassword = new javax.swing.JLabel();
@@ -46,15 +46,6 @@ public class LoginPage extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setSize(new java.awt.Dimension(400, 300));
-
-        MsgLogintype.setText("账号类型");
-
-        UserType.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "学生", "教师", "管理员" }));
-        UserType.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                UserTypeActionPerformed(evt);
-            }
-        });
 
         TxtUsername.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -80,14 +71,12 @@ public class LoginPage extends javax.swing.JFrame {
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addGap(24, 24, 24)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(MsgLogintype)
                     .addComponent(MsgUsername)
                     .addComponent(MsgPassword))
-                .addGap(18, 18, 18)
+                .addGap(42, 42, 42)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(TxtUserpassword, javax.swing.GroupLayout.PREFERRED_SIZE, 182, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(TxtUsername, javax.swing.GroupLayout.PREFERRED_SIZE, 182, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(UserType, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(TxtUsername, javax.swing.GroupLayout.PREFERRED_SIZE, 182, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap(128, Short.MAX_VALUE))
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addGap(140, 140, 140)
@@ -97,11 +86,7 @@ public class LoginPage extends javax.swing.JFrame {
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGap(61, 61, 61)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(MsgLogintype)
-                    .addComponent(UserType, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(25, 25, 25)
+                .addGap(107, 107, 107)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(TxtUsername, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(MsgUsername))
@@ -133,16 +118,14 @@ public class LoginPage extends javax.swing.JFrame {
         setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
-    private void UserTypeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_UserTypeActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_UserTypeActionPerformed
-
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         // TODO add your handling code here:
+        /*
         TeacherEntry.UserInfo userinfo = new TeacherEntry.UserInfo();
         userinfo.id = Long.parseLong(TxtUsername.getText());
         userinfo.password = String.valueOf(TxtUserpassword.getPassword());
         userinfo.usertype = UserType.getSelectedItem().toString();
+        */
         
     }//GEN-LAST:event_jButton1ActionPerformed
 
@@ -186,12 +169,10 @@ public class LoginPage extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JLabel MsgLogintype;
     private javax.swing.JLabel MsgPassword;
     private javax.swing.JLabel MsgUsername;
     private javax.swing.JTextField TxtUsername;
     private javax.swing.JPasswordField TxtUserpassword;
-    private javax.swing.JComboBox<String> UserType;
     private javax.swing.JButton jButton1;
     private javax.swing.JPanel jPanel1;
     // End of variables declaration//GEN-END:variables
