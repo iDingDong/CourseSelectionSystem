@@ -7,29 +7,28 @@ package courseselectionsystem;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
  *
  * @author 堃
  */
 public class Student {
-	private int m_id;
+	private long m_id;
 	
-	public Student(int id) {
+	public Student(long id) {
 		m_id = id;
 	}
 	
-	public int get_id() {
+	public long get_id() {
 		return m_id;
 	}
 	
 	public String get_name() {
 		String result = "[Unknown]";
 		String sql =
-			"SELECT student_name FROM students WHERE student_id = " + get_id()
+			"SELECT student_name FROM students WHERE student_id = " +
+			get_id() +
+			";"
 		;
 		try {
 			java.sql.ResultSet sql_result =
@@ -51,7 +50,9 @@ public class Student {
 	public ArrayList<Course> get_courses() {
 		ArrayList<Course> result = new ArrayList<Course>();
 		String sql =
-			"SELECT course_id FROM selections WHERE student_id = " + get_id()
+			"SELECT course_id FROM selections WHERE student_id = " +
+			get_id() +
+			";"
 		;
 		try {
 			java.sql.ResultSet sql_result =
@@ -59,7 +60,7 @@ public class Student {
 			;
 			try {
 				while (sql_result.next()) {
-					result.add(new Course(sql_result.getInt(1)));
+					result.add(new Course(sql_result.getLong(1)));
 				}
 			} finally {
 				sql_result.close();

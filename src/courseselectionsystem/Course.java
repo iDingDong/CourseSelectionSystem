@@ -14,7 +14,7 @@ import java.util.List;
  * @author 堃
  */
 public class Course {
-	private int m_id;
+	private final long m_id;
 	
 	public enum ScheduleType {
 		every_week,
@@ -22,14 +22,20 @@ public class Course {
 		even_only
 	}
 	
-	public Course(int id) {
+	public Course(long id) {
 		m_id = id;
+	}
+	
+	public long get_id() {
+		return m_id;
 	}
 	
 	public String get_name() {
 		String result = "[Unknown]";
 		String sql =
-			"SELECT course_name FROM courses WHERE course_id = " + get_id()
+			"SELECT course_name FROM courses WHERE course_id = " +
+			get_id() +
+			";"
 		;
 		try {
 			java.sql.ResultSet sql_result =
@@ -44,25 +50,19 @@ public class Course {
 		return result;
 	}
 	
-	public int get_id() {
-		return m_id;
-	}
-	
 	public Teacher get_teacher() {
-		int result = -1;
+		long result = -1;
 		String sql =
-			"SELECT teacher_id FROM courses WHERE course_id = " + get_id()
+			"SELECT teacher_id FROM courses WHERE course_id = " + get_id() + ";"
 		;
 		try {
-			java.sql.ResultSet sql_result =
-				CourseSelectionSystem.get_statement().executeQuery(sql)
-			;
-			try {
+			try (
+				java.sql.ResultSet sql_result =
+					CourseSelectionSystem.get_statement().executeQuery(sql)
+			) {
 				if (sql_result.next()) {
 					result = sql_result.getInt(1);
 				}
-			} finally {
-				sql_result.close();
 			}
 		} catch (SQLException ex) {
 			CourseSelectionSystem.send_message("Unable to inquire.");
@@ -73,21 +73,90 @@ public class Course {
 		return new Teacher(result);
 	}
 	
+	public int get_capacity() {
+		int result = -1;
+		String sql =
+			"SELECT capacity FROM courses WHERE course_id = " + get_id() + ";"
+		;
+		try {
+			try (
+				java.sql.ResultSet sql_result =
+					CourseSelectionSystem.get_statement().executeQuery(sql)
+			) {
+				if (sql_result.next()) {
+					result = sql_result.getInt(1);
+				}
+			}
+		} catch (SQLException ex) {
+			CourseSelectionSystem.send_message("Unable to inquire.");
+		}
+		if (result == -1) {
+			System.exit(-1);
+		}
+		return result;
+	}
+	
+	public int get_begin_week() {
+		int result = -1;
+		String sql =
+			"SELECT begin_week FROM courses WHERE course_id = " + get_id() + ";"
+		;
+		try {
+			try (
+				java.sql.ResultSet sql_result =
+					CourseSelectionSystem.get_statement().executeQuery(sql)
+			) {
+				if (sql_result.next()) {
+					result = sql_result.getInt(1);
+				}
+			}
+		} catch (SQLException ex) {
+			CourseSelectionSystem.send_message("Unable to inquire.");
+		}
+		if (result == -1) {
+			System.exit(-1);
+		}
+		return result;
+	}
+	
+	public int get_end_week() {
+		int result = -1;
+		String sql =
+			"SELECT end_week FROM courses WHERE course_id = " + get_id() + ";"
+		;
+		try {
+			try (
+				java.sql.ResultSet sql_result =
+					CourseSelectionSystem.get_statement().executeQuery(sql)
+			) {
+				if (sql_result.next()) {
+					result = sql_result.getInt(1);
+				}
+			}
+		} catch (SQLException ex) {
+			CourseSelectionSystem.send_message("Unable to inquire.");
+		}
+		if (result == -1) {
+			System.exit(-1);
+		}
+		return result;
+	}
+	
 	public ArrayList<Student> get_students() {
 		ArrayList<Student> result = new ArrayList<Student>();
 		String sql =
-			"SELECT student_id FROM selections WHERE course_id = " + get_id()
+			"SELECT student_id FROM selections WHERE course_id = " +
+			get_id() +
+			";"
 		;
 		try {
-			java.sql.ResultSet sql_result =
-				CourseSelectionSystem.get_statement().executeQuery(sql)
-			;
-			try {
+			try (
+				java.sql.ResultSet sql_result =
+					CourseSelectionSystem.get_statement().executeQuery(sql)
+			) {
 				while (sql_result.next()) {
-					result.add(new Student(sql_result.getInt(1)));
+					result.add(new Student(sql_result.getLong(1)));
 				}
-			} finally {
-				sql_result.close();
 			}
 		} catch (SQLException ex) {
 			CourseSelectionSystem.send_message("Unable to inquire.");
@@ -95,22 +164,26 @@ public class Course {
 		return result;
 	}
 	
-	public static boolean exist_id(int id) {
-		String sql = "SELECT course_id FROM courses WHERE course_id = " + id;
+	public static boolean exist_id(long id) {
+		String sql =
+			"SELECT course_id FROM courses WHERE course_id = " + id + ";"
+		;
 		try {
-			java.sql.ResultSet sql_result =
-				CourseSelectionSystem.get_statement().executeQuery(sql)
-			;
-			try {
+			try (
+				java.sql.ResultSet sql_result =
+					CourseSelectionSystem.get_statement().executeQuery(sql)
+			) {
 				return sql_result.next();
-			} finally {
-				sql_result.close();
 			}
 		} catch (SQLException ex) {
 			CourseSelectionSystem.send_message("Unable to inquire.");
 			System.exit(-1);
 		}
 		return true;
+	}
+	
+	public void delete_course() {
+		String sql = "DELETE FROM courses WHERE course_id = " + get_id();
 	}
 	
 }

@@ -32,11 +32,21 @@ public class CourseSelectionSystem {
 		public abstract Entry handle();
 	}
 	
-	private static Scanner s_scanner = new Scanner(System.in);
+	private static final Scanner s_scanner = new Scanner(System.in);
 	private static MessageHandler s_message_handler;
 	private static EntrySelectionHandler s_entry_selection_handler;
 	private static java.sql.Connection s_connection;
 	private static java.sql.Statement s_statement;
+	
+	public static void register_message_handler(MessageHandler handler) {
+		s_message_handler = handler;
+	}
+	
+	public static void register_entry_selection_handler(
+		EntrySelectionHandler handler
+	) {
+		s_entry_selection_handler = handler;
+	}
 	
 	public static java.sql.Statement get_statement() {
 		return s_statement;
@@ -79,9 +89,7 @@ public class CourseSelectionSystem {
 			} finally {
 				s_connection.close();
 			}
-		} catch(ClassNotFoundException ex) {
-			send_message("Failed to reach database.");
-		} catch (java.sql.SQLException ex) {
+		} catch(ClassNotFoundException | java.sql.SQLException ex) {
 			send_message("Failed to reach database.");
 		}
 	}
@@ -94,16 +102,27 @@ public class CourseSelectionSystem {
 			} else {
 				send_cmd_message("Please select an entry: ");
 				String choice = get_cmd_input_string();
-				if (choice.equals("exit")) {
+				switch (choice) {
+					case "exit":
 					entry = Entry.exit_system;
-				} else if (choice.equals("teacher")) {
+					break;
+					
+					case "teacher":
 					entry = Entry.teacher;
-				} else if (choice.equals("student")) {
+					break;
+					
+					case "student":
 					entry = Entry.student;
-				} else if (choice.equals("admin")) {
+					break;
+					
+					case "admin":
 					entry = Entry.admin;
-				} else {
+					break;
+					
+					default:
 					entry = Entry.unknown;
+					break;
+					
 				}
 			}
 			switch (entry) {
