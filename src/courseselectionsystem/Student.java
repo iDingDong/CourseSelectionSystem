@@ -13,7 +13,7 @@ import java.util.ArrayList;
  * @author 堃
  */
 public class Student {
-	private long m_id;
+	private final long m_id;
 	
 	public Student(long id) {
 		m_id = id;

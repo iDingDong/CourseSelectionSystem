@@ -135,6 +135,8 @@ public class CourseSelectionSystem {
 				break;
 				
 				case student:
+				StudentEntry student_entry = new StudentEntry();
+				student_entry.run();
 				break;
 				
 				case admin:

@@ -183,7 +183,19 @@ public class Course {
 	}
 	
 	public void delete_course() {
-		String sql = "DELETE FROM courses WHERE course_id = " + get_id();
+		String sql1 = "DELETE FROM courses WHERE course_id = " + get_id() + ";";
+		String sql2 =
+			"DELETE FROM selections WHERE course_id = " + get_id() + ";"
+		;
+		String sql3 = "DELETE FROM lessons WHERE course_id = " + get_id() + ";";
+		try {
+			CourseSelectionSystem.get_statement().execute(sql1);
+			CourseSelectionSystem.get_statement().execute(sql2);
+			CourseSelectionSystem.get_statement().execute(sql3);
+		} catch (SQLException ex) {
+			CourseSelectionSystem.send_message("Unable to delete.");
+			System.exit(-1);
+		}
 	}
 	
 }
