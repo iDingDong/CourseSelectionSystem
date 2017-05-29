@@ -16,6 +16,12 @@ import java.util.List;
 public class Course {
 	private int m_id;
 	
+	public enum ScheduleType {
+		every_week,
+		uneven_only,
+		even_only
+	}
+	
 	public Course(int id) {
 		m_id = id;
 	}
@@ -67,8 +73,8 @@ public class Course {
 		return new Teacher(result);
 	}
 	
-	public List<Student> get_students() {
-		List<Student> result = new ArrayList<Student>();
+	public ArrayList<Student> get_students() {
+		ArrayList<Student> result = new ArrayList<Student>();
 		String sql =
 			"SELECT student_id FROM selections WHERE course_id = " + get_id()
 		;
@@ -87,6 +93,24 @@ public class Course {
 			CourseSelectionSystem.send_message("Unable to inquire.");
 		}
 		return result;
+	}
+	
+	public static boolean exist_id(int id) {
+		String sql = "SELECT course_id FROM courses WHERE course_id = " + id;
+		try {
+			java.sql.ResultSet sql_result =
+				CourseSelectionSystem.get_statement().executeQuery(sql)
+			;
+			try {
+				return sql_result.next();
+			} finally {
+				sql_result.close();
+			}
+		} catch (SQLException ex) {
+			CourseSelectionSystem.send_message("Unable to inquire.");
+			System.exit(-1);
+		}
+		return true;
 	}
 	
 }

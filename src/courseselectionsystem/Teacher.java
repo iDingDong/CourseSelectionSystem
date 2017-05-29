@@ -46,8 +46,8 @@ public class Teacher {
 		return result;
 	}
 	
-	public List<Course> get_courses() {
-		List<Course> result = new ArrayList<Course>();
+	public ArrayList<Course> get_courses() {
+		ArrayList<Course> result = new ArrayList<Course>();
 		String sql =
 			"SELECT course_id FROM courses WHERE teacher_id = " + get_id()
 		;

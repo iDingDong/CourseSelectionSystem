@@ -48,8 +48,8 @@ public class Student {
 		return result;
 	}
 	
-	public List<Course> get_courses() {
-		List<Course> result = new ArrayList<Course>();
+	public ArrayList<Course> get_courses() {
+		ArrayList<Course> result = new ArrayList<Course>();
 		String sql =
 			"SELECT course_id FROM selections WHERE student_id = " + get_id()
 		;

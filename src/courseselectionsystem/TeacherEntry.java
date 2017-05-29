@@ -6,30 +6,56 @@
 package courseselectionsystem;
 
 import java.sql.SQLException;
+import java.util.ArrayList;
 
 /**
  *
  * @author 堃
  */
 public class TeacherEntry {
-	public static class Info {
-		int id;
-		String password;
-	};
+	public static class UserInfo {
+		public int id;
+		public String password;
+	}
+	
+	public static class CourseInfo {
+		public int id;
+		public String name;
+		public int capacity;
+		public int begin_week;
+		public int end_week;
+	}
+	
+	public enum Function {
+		exit_entry,
+		add_course,
+		delete_course,
+		modify_course,
+		unknown
+	}
 	
 	public static interface LoginHandler {
-		public abstract Info handle();
+		public abstract UserInfo handle();
+	}
+	
+	public static interface AddCourseHandler {
+		public abstract CourseInfo handle();
+	}
+	
+	public static interface FunctionChoiceHandler {
+		public abstract Function handle(ArrayList<Courses> courses);
 	}
 	
 	private Teacher m_user;
 	private static LoginHandler s_login_handler;
+	private static FunctionChoiceHandler s_function_choice_handler;
 	
 	public Teacher get_user() {
 		return m_user;
 	}
 	
 	public void run() {
-		Info info;
+		UserInfo info;
 		for (int count = 0; ; ++count) {
 			if (count >= 3) {
 				CourseSelectionSystem.send_message(
@@ -40,7 +66,7 @@ public class TeacherEntry {
 			if (s_login_handler != null) {
 				info = s_login_handler.handle();
 			} else {
-				info = new Info();
+				info = new UserInfo();
 				CourseSelectionSystem.send_cmd_message("ID: ");
 				info.id = Integer.valueOf(
 					CourseSelectionSystem.get_cmd_input_string()
@@ -56,9 +82,49 @@ public class TeacherEntry {
 		CourseSelectionSystem.send_cmd_message(
 			"Welcome," + m_user.get_name() + "\n"
 		);
+		
+		Function function_choice = Function.unknown;
+		for (; ; ) {
+			if (s_function_choice_handler != null) {
+				function_choice = s_function_choice_handler.handle(
+					get_user().get_courses()
+				);
+			} else {
+				CourseSelectionSystem.send_cmd_message(
+					"Please select function: "
+				);
+				String choice = CourseSelectionSystem.get_cmd_input_string();
+				if (choice.equals("back")) {
+					function_choice = Function.exit_entry;
+				} else if (choice.equals("add")) {
+					function_choice = Function.add_course;
+				} else {
+					function_choice = Function.unknown;
+				}
+			}
+			switch (function_choice) {
+				case exit_entry:
+				return;
+				
+				case add_course:
+				add_course();
+				break;
+				
+				default:
+				CourseSelectionSystem.send_message(
+					"Unknown function, please re-select"
+				);
+				break;
+				
+			}
+		}
 	}
 	
-	private boolean login(Info info) {
+	private void add_course() {
+		
+	}
+	
+	private boolean login(UserInfo info) {
 		String sql =
 			"SELECT password FROM teachers WHERE teacher_id = " + info.id
 		;
@@ -80,6 +146,33 @@ public class TeacherEntry {
 			CourseSelectionSystem.send_message("Unable to inquire.");
 		}
 		return false;
+	}
+	
+	private void add_course(Course.Info info) {
+		if (Course.exist_id(info.id)) {
+			CourseSelectionSystem.send_message("Course id already exist!");
+			return;
+		}
+		String sql =
+			"INSERT INTO courses values(" +
+			info.id +
+			", " +
+			info.name +
+			", " +
+			get_user().get_id() +
+			", " +
+			info.capacity +
+			", " +
+			info.begin_week +
+			", " +
+			info.end_week +
+			");"
+		;
+		try {
+			CourseSelectionSystem.get_statement().execute(sql);
+		} catch (SQLException ex) {
+			CourseSelectionSystem.send_message("Failed to add course.");
+		}
 	}
 	
 }

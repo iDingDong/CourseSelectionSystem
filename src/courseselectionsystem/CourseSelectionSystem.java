@@ -94,7 +94,9 @@ public class CourseSelectionSystem {
 			} else {
 				send_cmd_message("Please select an entry: ");
 				String choice = get_cmd_input_string();
-				if (choice.equals( "teacher")) {
+				if (choice.equals("exit")) {
+					entry = Entry.exit_system;
+				} else if (choice.equals("teacher")) {
 					entry = Entry.teacher;
 				} else if (choice.equals("student")) {
 					entry = Entry.student;
@@ -104,10 +106,10 @@ public class CourseSelectionSystem {
 					entry = Entry.unknown;
 				}
 			}
-			if (entry == Entry.exit_system) {
-				break;
-			}
 			switch (entry) {
+				case exit_system:
+				return;
+				
 				case teacher:
 				TeacherEntry teacher_entry = new TeacherEntry();
 				teacher_entry.run();
