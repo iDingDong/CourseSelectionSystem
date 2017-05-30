@@ -230,6 +230,10 @@ public class Course {
 		return true;
 	}
 	
+	public boolean exist() {
+		return exist_id(get_id());
+	}
+	
 	public void delete_course() {
 		String sql1 = "DELETE FROM courses WHERE course_id = " + get_id() + ";";
 		String sql2 =

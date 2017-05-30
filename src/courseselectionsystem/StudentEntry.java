@@ -34,6 +34,10 @@ public class StudentEntry {
 		public abstract Function handle(Student user);
 	}
 	
+	public static interface ViewTimetableHandler {
+		public abstract Course handle(List<Course> all_courses);
+	}
+	
 	public static interface ViewCoursesHandler {
 		public abstract Course handle(List<Course> all_courses);
 	}
@@ -41,6 +45,7 @@ public class StudentEntry {
 	private Student m_user;
 	private static LoginHandler s_login_handler;
 	private static FunctionChoiceHandler s_function_choice_handler;
+	private static ViewTimetableHandler s_view_timetable_handler;
 	private static ViewCoursesHandler s_view_courses_handler;
 	
 	public static void register_login_handler(LoginHandler handler) {
@@ -51,6 +56,18 @@ public class StudentEntry {
 		FunctionChoiceHandler handler
 	) {
 		s_function_choice_handler = handler;
+	}
+	
+	public static void register_view_timetable_handler(
+		ViewTimetableHandler handler
+	) {
+		s_view_timetable_handler = handler;
+	}
+	
+	public static void register_view_courses_handler(
+		ViewCoursesHandler handler
+	) {
+		s_view_courses_handler = handler;
 	}
 	
 	public Student get_user() {
@@ -126,6 +143,7 @@ public class StudentEntry {
 				break;
 				
 				case courses:
+				view_courses();
 				break;
 				
 				default:
@@ -138,28 +156,66 @@ public class StudentEntry {
 		}
 	}
 	
-	public void view_timetable() {
+	private void view_timetable() {
+		for (; ; ) {
+			Course selected;
+			if (s_view_timetable_handler != null) {
+				selected = s_view_timetable_handler.handle(
+					Course.get_all_courses()
+				);
+			} else {
+				CourseSelectionSystem.send_cmd_message(
+					Course.display_info_header() + "\n"
+				);
+				for (Course course : get_user().get_courses()) {
+					CourseSelectionSystem.send_cmd_message(
+						course.display_info_on_cmd() + "\n"
+					);
+				}
+				CourseSelectionSystem.send_cmd_message("De-select a course: ");
+				String selection = CourseSelectionSystem.get_cmd_input_string();
+				if (selection.equals("back")) {
+					selected = null;
+				} else {
+					selected = new Course(Long.valueOf(selection));
+				}
+			}
+			if (selected == null) {
+				return;
+			}
+			get_user().deselect_course(selected);
+		}
 	}
 	
-	public void view_courses() {
-		Course selected;
-		if (s_view_courses_handler != null) {
-			selected = s_view_courses_handler.handle(Course.get_all_courses());
-		} else {
-			
-			CourseSelectionSystem.send_cmd_message(
-				Course.display_info_header() + "\n"
-			);
-			for (Course course : Course.get_all_courses()) {
-				CourseSelectionSystem.send_cmd_message(
-					course.display_info_on_cmd() + "\n"
+	private void view_courses() {
+		for (; ; ) {
+			Course selected;
+			if (s_view_courses_handler != null) {
+				selected = s_view_courses_handler.handle(
+					Course.get_all_courses()
 				);
+			} else {
+				CourseSelectionSystem.send_cmd_message(
+					Course.display_info_header() + "\n"
+				);
+				for (Course course : Course.get_all_courses()) {
+					CourseSelectionSystem.send_cmd_message(
+						course.display_info_on_cmd() + "\n"
+					);
+				}
+				CourseSelectionSystem.send_cmd_message("Select a course: ");
+				String selection = CourseSelectionSystem.get_cmd_input_string();
+				if (selection.equals("back")) {
+					selected = null;
+				} else {
+					selected = new Course(Long.valueOf(selection));
+				}
 			}
-			selected = new Course(
-				Long.valueOf(CourseSelectionSystem.get_cmd_input_string())
-			);
+			if (selected == null) {
+				return;
+			}
+			get_user().select_course(selected);
 		}
-		get_user().select_course(selected);
 	}
 	
 	private boolean login(UserInfo info) {
