@@ -13,14 +13,15 @@ import courseselectionsystem.*;
  */
 public class UIController  implements CourseSelectionSystem.EntrySelectionHandler {
     UserTypeSelectPage usertypeselectpage;
-    CourseSelectionSystem controller;
+
    
-    public UIController(CourseSelectionSystem controller){
+    public UIController(){
+
         usertypeselectpage = new UserTypeSelectPage();
         usertypeselectpage.setVisible(false);
-        this.controller = controller;
-        this.controller.WaitForCallback(UIController.this);
     }
+    
+    @Override
     public CourseSelectionSystem.Entry handle(){
         usertypeselectpage.setVisible(true);
         return usertypeselectpage.get_entry();
