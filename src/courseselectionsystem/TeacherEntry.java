@@ -117,6 +117,15 @@ public class TeacherEntry {
 				);
 			} else {
 				action = new Action();
+				Course.display_info_header();
+				CourseSelectionSystem.send_cmd_message(
+					Course.display_info_header() + "\n"
+				);
+				for (Course course : get_user().get_courses()) {
+					CourseSelectionSystem.send_cmd_message(
+						course.display_info_on_cmd() + "\n"
+					);
+				}
 				CourseSelectionSystem.send_cmd_message(
 					"Please select function: "
 				);

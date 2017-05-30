@@ -41,6 +41,7 @@ public class StudentEntry {
 	private Student m_user;
 	private static LoginHandler s_login_handler;
 	private static FunctionChoiceHandler s_function_choice_handler;
+	private static ViewCoursesHandler s_view_courses_handler;
 	
 	public static void register_login_handler(LoginHandler handler) {
 		s_login_handler = handler;
@@ -141,7 +142,24 @@ public class StudentEntry {
 	}
 	
 	public void view_courses() {
-		
+		Course selected;
+		if (s_view_courses_handler != null) {
+			selected = s_view_courses_handler.handle(Course.get_all_courses());
+		} else {
+			
+			CourseSelectionSystem.send_cmd_message(
+				Course.display_info_header() + "\n"
+			);
+			for (Course course : Course.get_all_courses()) {
+				CourseSelectionSystem.send_cmd_message(
+					course.display_info_on_cmd() + "\n"
+				);
+			}
+			selected = new Course(
+				Long.valueOf(CourseSelectionSystem.get_cmd_input_string())
+			);
+		}
+		get_user().select_course(selected);
 	}
 	
 	private boolean login(UserInfo info) {

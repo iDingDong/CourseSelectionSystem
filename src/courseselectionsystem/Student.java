@@ -69,6 +69,10 @@ public class Student {
 	}
 	
 	public void select_course(Course course) {
+		if (course.is_full()) {
+			CourseSelectionSystem.send_message("Course already full.");
+			return;
+		}
 		String sql =
 			"SELECT couse_id, student_id FROM selections WHERE course_id = " +
 			course.get_id() +

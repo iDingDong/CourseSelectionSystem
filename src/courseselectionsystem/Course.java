@@ -22,6 +22,25 @@ public class Course {
 		even_only
 	}
 	
+	public static List<Course> get_all_courses() {
+		ArrayList<Course> result = new ArrayList<Course>();
+		String sql =
+			"SELECT course_id FROM courses;";
+		try {
+			try (
+				java.sql.ResultSet sql_result =
+					CourseSelectionSystem.get_statement().executeQuery(sql)
+			) {
+				while (sql_result.next()) {
+					result.add(new Course(sql_result.getLong(1)));
+				}
+			}
+		} catch (SQLException ex) {
+			CourseSelectionSystem.send_message("Unable to inquire.");
+		}
+		return result;
+	}
+	
 	public Course(long id) {
 		m_id = id;
 	}
@@ -225,6 +244,28 @@ public class Course {
 			CourseSelectionSystem.send_message("Unable to delete.");
 			System.exit(-1);
 		}
+	}
+	
+	public static String display_info_header() {
+		return
+			String.format("%1$-9s", "C-ID") +
+			String.format("%1$-33s", "Name") +
+			String.format("%1$-13s", "T-ID") +
+			String.format("%1$-8s", "Cap") +
+			String.format("%1$-6s", "Sche")
+		;
+	}
+	
+	public String display_info_on_cmd() {
+		return
+			String.format("%1$-9s", String.valueOf(get_id())) +
+			String.format("%1$-33s", get_name()) +
+			String.format("%1$-13s", String.valueOf(get_teacher().get_id())) +
+			String.format(
+				"%1$-8s", get_student_count() + "/" + get_capacity()
+			) +
+			String.format("%1$-6s", get_begin_week() + "-" + get_end_week())
+		;
 	}
 	
 }
