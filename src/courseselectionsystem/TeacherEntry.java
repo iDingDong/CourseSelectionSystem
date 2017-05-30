@@ -25,10 +25,6 @@ public class TeacherEntry {
 		public int capacity;
 		public int begin_week;
 		public int end_week;
-	}
-	
-	public static class CourseModificationInfo {
-		public CourseInfo course_info;
 		public List<Course.Lesson> lessons;
 	}
 	
@@ -58,7 +54,7 @@ public class TeacherEntry {
 	}
 	
 	public static interface ModifyCourseHandler {
-		public abstract void handle(CourseModificationInfo info);
+		public abstract void handle(CourseInfo info);
 	}
 	
 	private Teacher m_user;
@@ -163,6 +159,14 @@ public class TeacherEntry {
 					));
 					break;
 					
+					case "modify":
+					action.function_choice = Function.modify_course;
+					CourseSelectionSystem.send_cmd_message("Course ID: ");
+					action.course = new Course(Long.valueOf(
+						CourseSelectionSystem.get_cmd_input_string()
+					));
+					break;
+					
 					default:
 					action.function_choice = Function.unknown;
 					break;
@@ -179,6 +183,10 @@ public class TeacherEntry {
 				
 				case delete_course:
 				delete_course(action.course);
+				break;
+				
+				case modify_course:
+				modify_course(action.course);
 				break;
 				
 				default:
@@ -237,6 +245,28 @@ public class TeacherEntry {
 			info.end_week = Integer.valueOf(
 				CourseSelectionSystem.get_cmd_input_string()
 			);
+			info.lessons = new ArrayList<Course.Lesson>();
+			for (; ; ) {
+				String input;
+				Course.Lesson lesson = new Course.Lesson();
+				CourseSelectionSystem.send_cmd_message(
+					"Day of week: "
+				);
+				input = CourseSelectionSystem.get_cmd_input_string();
+				if (input.equals("cancel")) {
+					break;
+				}
+				lesson.day_of_week = Integer.valueOf(input);
+				CourseSelectionSystem.send_cmd_message(
+					"Lesson of day: "
+				);
+				input = CourseSelectionSystem.get_cmd_input_string();
+				if (input.equals("cancel")) {
+					break;
+				}
+				lesson.lesson_of_day = Integer.valueOf(input);
+				info.lessons.add(lesson);
+			}
 		}
 		add_course_impl(info);
 	}
@@ -248,7 +278,7 @@ public class TeacherEntry {
 		}
 		if (info.begin_week > info.end_week) {
 			CourseSelectionSystem.send_message(
-				"Begin week should be before end week."
+				"Begin week should be no later than end week."
 			);
 			return;
 		}
@@ -272,6 +302,7 @@ public class TeacherEntry {
 		} catch (SQLException ex) {
 			CourseSelectionSystem.send_message("Failed to add course.");
 		}
+		new Course(info.id).set_lessons(info.lessons);
 	}
 	
 	private void delete_course(Course course) {
@@ -287,32 +318,83 @@ public class TeacherEntry {
 			CourseSelectionSystem.send_message("This is not your course.");
 			return;
 		}
-		CourseModificationInfo info = new CourseModificationInfo();
-		info.course_info.id = course.get_id();
-		info.course_info.name = course.get_name();
-		info.course_info.capacity = course.get_capacity();
-		info.course_info.begin_week = course.get_begin_week();
+		CourseInfo info = new CourseInfo();
+		info.id = course.get_id();
+		info.name = course.get_name();
+		info.capacity = course.get_capacity();
+		info.begin_week = course.get_begin_week();
+		info.end_week = course.get_end_week();
+		info.lessons = course.get_lessons();
 		if (s_modify_course_handler != null) {
 			s_modify_course_handler.handle(info);
 		} else {
-			info.course_info.id = Long.valueOf(
+			CourseSelectionSystem.send_cmd_message("ID: ");
+			info.id = Long.valueOf(
 				CourseSelectionSystem.get_cmd_input_string()
 			);
 			CourseSelectionSystem.send_cmd_message("Name: ");
-			info.course_info.name = CourseSelectionSystem.get_cmd_input_string();
+			info.name = CourseSelectionSystem.get_cmd_input_string();
 			CourseSelectionSystem.send_cmd_message("Capacity: ");
-			info.course_info.capacity = Integer.valueOf(
+			info.capacity = Integer.valueOf(
 				CourseSelectionSystem.get_cmd_input_string()
 			);
 			CourseSelectionSystem.send_cmd_message("Begin week: ");
-			info.course_info.begin_week = Integer.valueOf(
+			info.begin_week = Integer.valueOf(
 				CourseSelectionSystem.get_cmd_input_string()
 			);
 			CourseSelectionSystem.send_cmd_message("End week: ");
-			info.course_info.end_week = Integer.valueOf(
+			info.end_week = Integer.valueOf(
 				CourseSelectionSystem.get_cmd_input_string()
 			);
-			CourseSelectionSystem.send_cmd_message("End week: ");
+			if (info.begin_week > info.end_week) {
+				CourseSelectionSystem.send_message(
+					"Begin week should be no later than end week."
+				);
+				return;
+			}
+			for (; ; ) {
+				String input;
+				Course.Lesson lesson = new Course.Lesson();
+				CourseSelectionSystem.send_cmd_message(
+					"Day of week: "
+				);
+				input = CourseSelectionSystem.get_cmd_input_string();
+				if (input.equals("cancel")) {
+					break;
+				}
+				lesson.day_of_week = Integer.valueOf(input);
+				CourseSelectionSystem.send_cmd_message(
+					"Lesson of day: "
+				);
+				input = CourseSelectionSystem.get_cmd_input_string();
+				if (input.equals("cancel")) {
+					break;
+				}
+				lesson.lesson_of_day = Integer.valueOf(input);
+				info.lessons.add(lesson);
+			}
+		}
+		modify_course_impl(course, info);
+	}
+	
+	private void modify_course_impl(
+		Course course, CourseInfo info
+	) {
+		if (
+			course.check_new_id(info.id) &&
+			course.check_new_name(info.name) &&
+			course.check_new_capacity(info.capacity) &&
+			course.check_new_schedule(
+				info.begin_week, info.end_week
+			)
+		) {
+			course.change_id(info.id);
+			course.change_name(info.name);
+			course.change_capacity(info.capacity);
+			course.change_schedule(
+				info.begin_week, info.end_week
+			);
+			course.set_lessons(info.lessons);
 		}
 	}
 	
