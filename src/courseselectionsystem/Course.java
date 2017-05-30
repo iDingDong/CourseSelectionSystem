@@ -16,6 +16,11 @@ import java.util.List;
 public class Course {
 	private final long m_id;
 	
+	public class Lesson {
+		int day_of_week;
+		int lesson_of_day;
+	}
+	
 	public enum ScheduleType {
 		every_week,
 		uneven_only,
@@ -204,6 +209,32 @@ public class Course {
 			) {
 				while (sql_result.next()) {
 					result.add(new Student(sql_result.getLong(1)));
+				}
+			}
+		} catch (SQLException ex) {
+			CourseSelectionSystem.send_message("Unable to inquire.");
+		}
+		return result;
+	}
+	
+	public List<Lesson> get_lessons() {
+		ArrayList<Lesson> result = new ArrayList<Lesson>();
+		String sql =
+			"SELECT day_of_week, lesson_of_day FROM lessons " +
+			"WHERE course_id = " +
+			get_id() +
+			";"
+		;
+		try {
+			try (
+				java.sql.ResultSet sql_result =
+					CourseSelectionSystem.get_statement().executeQuery(sql)
+			) {
+				while (sql_result.next()) {
+					Lesson lesson = new Lesson();
+					lesson.day_of_week = sql_result.getInt(1);
+					lesson.lesson_of_day = sql_result.getInt(2);
+					result.add(lesson);
 				}
 			}
 		} catch (SQLException ex) {

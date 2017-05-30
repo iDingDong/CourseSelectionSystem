@@ -27,6 +27,11 @@ public class TeacherEntry {
 		public int end_week;
 	}
 	
+	public static class CourseModificationInfo {
+		public CourseInfo course_info;
+		public List<Course.Lesson> lessons;
+	}
+	
 	public static enum Function {
 		exit_entry,
 		add_course,
@@ -52,10 +57,15 @@ public class TeacherEntry {
 		public abstract CourseInfo handle();
 	}
 	
+	public static interface ModifyCourseHandler {
+		public abstract void handle(CourseModificationInfo info);
+	}
+	
 	private Teacher m_user;
 	private static LoginHandler s_login_handler;
 	private static ActionHandler s_action_handler;
 	private static AddCourseHandler s_add_course_handler;
+	private static ModifyCourseHandler s_modify_course_handler;
 	
 	public static void register_login_handler(LoginHandler handler) {
 		s_login_handler = handler;
@@ -71,6 +81,12 @@ public class TeacherEntry {
 		AddCourseHandler handler
 	) {
 		s_add_course_handler = handler;
+	}
+	
+	public static void register_modify_course_handler(
+		ModifyCourseHandler handler
+	) {
+		s_modify_course_handler = handler;
 	}
 	
 	public Teacher get_user() {
@@ -230,6 +246,12 @@ public class TeacherEntry {
 			CourseSelectionSystem.send_message("Course id already exist!");
 			return;
 		}
+		if (info.begin_week > info.end_week) {
+			CourseSelectionSystem.send_message(
+				"Begin week should be before end week."
+			);
+			return;
+		}
 		String sql =
 			"INSERT INTO courses values(" +
 			info.id +
@@ -255,8 +277,42 @@ public class TeacherEntry {
 	private void delete_course(Course course) {
 		if (course.get_teacher().get_id() != get_user().get_id()) {
 			CourseSelectionSystem.send_message("This is not your course.");
+			return;
+		}
+		course.delete_course();
+	}
+	
+	private void modify_course(Course course) {
+		if (course.get_teacher().get_id() != get_user().get_id()) {
+			CourseSelectionSystem.send_message("This is not your course.");
+			return;
+		}
+		CourseModificationInfo info = new CourseModificationInfo();
+		info.course_info.id = course.get_id();
+		info.course_info.name = course.get_name();
+		info.course_info.capacity = course.get_capacity();
+		info.course_info.begin_week = course.get_begin_week();
+		if (s_modify_course_handler != null) {
+			s_modify_course_handler.handle(info);
 		} else {
-			course.delete_course();
+			info.course_info.id = Long.valueOf(
+				CourseSelectionSystem.get_cmd_input_string()
+			);
+			CourseSelectionSystem.send_cmd_message("Name: ");
+			info.course_info.name = CourseSelectionSystem.get_cmd_input_string();
+			CourseSelectionSystem.send_cmd_message("Capacity: ");
+			info.course_info.capacity = Integer.valueOf(
+				CourseSelectionSystem.get_cmd_input_string()
+			);
+			CourseSelectionSystem.send_cmd_message("Begin week: ");
+			info.course_info.begin_week = Integer.valueOf(
+				CourseSelectionSystem.get_cmd_input_string()
+			);
+			CourseSelectionSystem.send_cmd_message("End week: ");
+			info.course_info.end_week = Integer.valueOf(
+				CourseSelectionSystem.get_cmd_input_string()
+			);
+			CourseSelectionSystem.send_cmd_message("End week: ");
 		}
 	}
 	
