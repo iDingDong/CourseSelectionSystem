@@ -7,6 +7,7 @@ package courseselectionsystem;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  *
@@ -44,7 +45,7 @@ public class TeacherEntry {
 	}
 	
 	public static interface ActionHandler {
-		public abstract Action handle(ArrayList<Course> courses);
+		public abstract Action handle(List<Course> courses);
 	}
 	
 	public static interface AddCourseHandler {

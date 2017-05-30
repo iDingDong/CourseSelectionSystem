@@ -7,6 +7,7 @@ package courseselectionsystem;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  *
@@ -31,15 +32,13 @@ public class Student {
 			";"
 		;
 		try {
-			java.sql.ResultSet sql_result =
-				CourseSelectionSystem.get_statement().executeQuery(sql)
-			;
-			try {
+			try (
+				java.sql.ResultSet sql_result =
+					CourseSelectionSystem.get_statement().executeQuery(sql)
+			) {
 				if (sql_result.next()) {
 					result = sql_result.getString(1);
 				}
-			} finally {
-				sql_result.close();
 			}
 		} catch (SQLException ex) {
 			CourseSelectionSystem.send_message("Unable to inquire.");
@@ -47,7 +46,7 @@ public class Student {
 		return result;
 	}
 	
-	public ArrayList<Course> get_courses() {
+	public List<Course> get_courses() {
 		ArrayList<Course> result = new ArrayList<Course>();
 		String sql =
 			"SELECT course_id FROM selections WHERE student_id = " +
@@ -55,20 +54,50 @@ public class Student {
 			";"
 		;
 		try {
-			java.sql.ResultSet sql_result =
+			try (
+				java.sql.ResultSet sql_result =
 				CourseSelectionSystem.get_statement().executeQuery(sql)
-			;
-			try {
+			) {
 				while (sql_result.next()) {
 					result.add(new Course(sql_result.getLong(1)));
 				}
-			} finally {
-				sql_result.close();
 			}
 		} catch (SQLException ex) {
 			CourseSelectionSystem.send_message("Unable to inquire.");
 		}
 		return result;
+	}
+	
+	public void select_course(Course course) {
+		String sql =
+			"SELECT couse_id, student_id FROM selections WHERE course_id = " +
+			course.get_id() +
+			" AND student_id = " +
+			get_id() + ";"
+		;
+		try {
+			try (
+				java.sql.ResultSet sql_result =
+				CourseSelectionSystem.get_statement().executeQuery(sql)
+			) {
+				if (sql_result.next()) {
+					CourseSelectionSystem.send_message(
+						"Course already selected."
+					);
+					return;
+				}
+				sql =
+					"INSERT INTO selections VALUES(" +
+					course.get_id() +
+					", " +
+					get_id() +
+					");"
+				;
+				CourseSelectionSystem.get_statement().execute(sql);
+			}
+		} catch (SQLException ex) {
+			CourseSelectionSystem.send_message("Unable to select course.");
+		}
 	}
 	
 }

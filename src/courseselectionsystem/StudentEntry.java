@@ -7,6 +7,7 @@ package courseselectionsystem;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  *
@@ -21,7 +22,7 @@ public class StudentEntry {
 	public static enum Function {
 		exit_entry,
 		timetable,
-		view_courses,
+		courses,
 		unknown
 	}
 
@@ -31,6 +32,10 @@ public class StudentEntry {
 	
 	public static interface FunctionChoiceHandler {
 		public abstract Function handle(Student user);
+	}
+	
+	public static interface ViewCoursesHandler {
+		public abstract Course handle(List<Course> all_courses);
 	}
 	
 	private Student m_user;
@@ -102,7 +107,7 @@ public class StudentEntry {
 					break;
 					
 					case "courses":
-					function_choice = Function.view_courses;
+					function_choice = Function.courses;
 					break;
 					
 					default:
@@ -116,9 +121,10 @@ public class StudentEntry {
 				return;
 				
 				case timetable:
+				view_timetable();
 				break;
 				
-				case view_courses:
+				case courses:
 				break;
 				
 				default:
@@ -129,6 +135,13 @@ public class StudentEntry {
 				
 			}
 		}
+	}
+	
+	public void view_timetable() {
+	}
+	
+	public void view_courses() {
+		
 	}
 	
 	private boolean login(UserInfo info) {

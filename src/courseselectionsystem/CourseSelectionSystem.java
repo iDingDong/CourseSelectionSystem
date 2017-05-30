@@ -38,6 +38,9 @@ public class CourseSelectionSystem {
 	private static java.sql.Connection s_connection;
 	private static java.sql.Statement s_statement;
 	
+	public static void init_ui() {
+	}
+	
 	public static void register_message_handler(MessageHandler handler) {
 		s_message_handler = handler;
 	}
@@ -73,6 +76,7 @@ public class CourseSelectionSystem {
 	 */
 	public static void main(String[] args) {
 		System.out.println("begin");
+		init_ui();
 		try {
 			Class.forName("com.mysql.jdbc.Driver");
 			s_connection = java.sql.DriverManager.getConnection(

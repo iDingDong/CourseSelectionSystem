@@ -142,7 +142,36 @@ public class Course {
 		return result;
 	}
 	
-	public ArrayList<Student> get_students() {
+	public int get_student_count() {
+		int result = -1;
+		String sql =
+			"SELECT COUNT(*) FROM selections WHERE course_id = " +
+			get_id() +
+			";"
+		;
+		try {
+			try (
+				java.sql.ResultSet sql_result =
+					CourseSelectionSystem.get_statement().executeQuery(sql)
+			) {
+				if (sql_result.next()) {
+					result = sql_result.getInt(1);
+				}
+			}
+		} catch (SQLException ex) {
+			CourseSelectionSystem.send_message("Unable to inquire.");
+		}
+		if (result == -1) {
+			System.exit(-1);
+		}
+		return result;
+	}
+	
+	public boolean is_full() {
+		return get_student_count() >= get_capacity();
+	}
+	
+	public List<Student> get_students() {
 		ArrayList<Student> result = new ArrayList<Student>();
 		String sql =
 			"SELECT student_id FROM selections WHERE course_id = " +
