@@ -39,7 +39,7 @@ public class StudentEntry {
 	}
 	
 	public static interface ViewCoursesHandler {
-		public abstract Course handle(List<Course> all_courses);
+		public abstract Course handle(Student user, List<Course> all_courses);
 	}
 	
 	private Student m_user;
@@ -192,7 +192,7 @@ public class StudentEntry {
 			Course selected;
 			if (s_view_courses_handler != null) {
 				selected = s_view_courses_handler.handle(
-					Course.get_all_courses()
+					get_user(), Course.get_all_courses()
 				);
 			} else {
 				CourseSelectionSystem.send_cmd_message(
