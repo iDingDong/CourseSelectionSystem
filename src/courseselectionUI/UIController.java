@@ -47,17 +47,13 @@ public class UIController  implements CourseSelectionSystem.EntrySelectionHandle
         
         
         
-        for (; ; ){
-            wait_until_notified();
-            entry = usertypeselectpage.get_entry();
-            if(entry !=  CourseSelectionSystem.Entry.unknown){
-                
-                //System.out.println("返回了");
-                usertypeselectpage.setVisible(false);
-                //usertypeselectpage.setVisible(false);
-                return entry;
-            }
-        }
+        
+        wait_until_notified();
+        entry = usertypeselectpage.get_entry();
+
+        //System.out.println("返回了");
+        usertypeselectpage.setVisible(false);
+        return entry;
         
     }
     

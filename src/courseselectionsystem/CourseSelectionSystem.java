@@ -7,8 +7,10 @@ package courseselectionsystem;
 
 import java.util.Scanner;
 import courseselectionUI.*;
+import courseselectionUI.CourseSelectForm.CourseSelectionController;
 import courseselectionUI.LoginPage.StudentLoginPageController;
 import courseselectionUI.StudentClient.StudentClientController;
+import static courseselectionsystem.StudentEntry.register_view_courses_handler;
 /**
  *
  * @author 堃
@@ -40,6 +42,7 @@ public class CourseSelectionSystem {
             register_entry_selection_handler(new courseselectionUI.UIController());
             StudentEntry.register_login_handler(new StudentLoginPageController());
             StudentEntry.register_function_choice_handler(new StudentClientController());
+            register_view_courses_handler(new CourseSelectionController());
 	}
 	
 	public static void register_message_handler(MessageHandler handler) {

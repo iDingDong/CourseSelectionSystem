@@ -23,10 +23,15 @@ public class LoginPage extends javax.swing.JFrame {
         @Override
         public StudentEntry.UserInfo handle(){
             loginpage.setVisible(true);
+            loginpage.TxtUsername.setText("");
+            loginpage.TxtUserpassword.setText("");
             UIController.wait_until_notified();
             StudentEntry.UserInfo result = new StudentEntry.UserInfo();
             result.id = loginpage.user_info.id;
             result.password = loginpage.user_info.password;
+            loginpage.setVisible(false);
+            loginpage.TxtUsername.setText("");
+            loginpage.TxtUserpassword.setText("");
             return result;
         }
         public StudentLoginPageController(){
@@ -127,7 +132,7 @@ public class LoginPage extends javax.swing.JFrame {
                 .addContainerGap(47, Short.MAX_VALUE))
         );
 
-        TxtUsername.getAccessibleContext().setAccessibleName("TxtUsername");
+        TxtUsername.getAccessibleContext().setAccessibleName("");
         TxtUserpassword.getAccessibleContext().setAccessibleName("TxtPassword");
         jButton1.getAccessibleContext().setAccessibleName("LoginSubmit");
 
