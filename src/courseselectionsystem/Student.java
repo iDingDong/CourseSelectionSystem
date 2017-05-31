@@ -69,12 +69,16 @@ public class Student {
 	}
 	
 	public void select_course(Course course) {
+		if (!course.exist()) {
+			CourseSelectionSystem.send_message("Course doesn't exist.");
+			return;
+		}
 		if (course.is_full()) {
 			CourseSelectionSystem.send_message("Course already full.");
 			return;
 		}
 		String sql =
-			"SELECT couse_id, student_id FROM selections WHERE course_id = " +
+			"SELECT * FROM selections WHERE course_id = " +
 			course.get_id() +
 			" AND student_id = " +
 			get_id() + ";"
@@ -82,7 +86,7 @@ public class Student {
 		try {
 			try (
 				java.sql.ResultSet sql_result =
-				CourseSelectionSystem.get_statement().executeQuery(sql)
+					CourseSelectionSystem.get_statement().executeQuery(sql)
 			) {
 				if (sql_result.next()) {
 					CourseSelectionSystem.send_message(
@@ -101,6 +105,38 @@ public class Student {
 			}
 		} catch (SQLException ex) {
 			CourseSelectionSystem.send_message("Unable to select course.");
+		}
+	}
+	
+	public void deselect_course(Course course) {
+		String sql =
+			"SELECT * FROM selections WHERE course_id = " +
+			course.get_id() +
+			" AND student_id = " +
+			get_id() + ";"
+		;
+		try {
+			try (
+				java.sql.ResultSet sql_result =
+				CourseSelectionSystem.get_statement().executeQuery(sql)
+			) {
+				if (!sql_result.next()) {
+					CourseSelectionSystem.send_message(
+						"Course not selected."
+					);
+					return;
+				}
+				sql =
+					"DELETE FROM selections WHERE course_id = " +
+					course.get_id() +
+					" and student_id = " +
+					get_id() +
+					";"
+				;
+				CourseSelectionSystem.get_statement().execute(sql);
+			}
+		} catch (SQLException ex) {
+			CourseSelectionSystem.send_message("Unable to deselect course.");
 		}
 	}
 	
