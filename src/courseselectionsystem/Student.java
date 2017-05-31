@@ -14,7 +14,7 @@ import java.util.List;
  * @author 堃
  */
 public class Student {
-	private final long m_id;
+	private long m_id;
 	
 	public Student(long id) {
 		m_id = id;
@@ -28,6 +28,28 @@ public class Student {
 		String result = "[Unknown]";
 		String sql =
 			"SELECT student_name FROM students WHERE student_id = " +
+			get_id() +
+			";"
+		;
+		try {
+			try (
+				java.sql.ResultSet sql_result =
+					CourseSelectionSystem.get_statement().executeQuery(sql)
+			) {
+				if (sql_result.next()) {
+					result = sql_result.getString(1);
+				}
+			}
+		} catch (SQLException ex) {
+			CourseSelectionSystem.send_message("Unable to inquire.");
+		}
+		return result;
+	}
+	
+	public String get_password() {
+		String result = "[Unknown]";
+		String sql =
+			"SELECT password FROM students WHERE student_id = " +
 			get_id() +
 			";"
 		;
@@ -66,6 +88,28 @@ public class Student {
 			CourseSelectionSystem.send_message("Unable to inquire.");
 		}
 		return result;
+	}
+	
+	public static boolean exist_id(long id) {
+		String sql =
+			"SELECT student_id FROM students WHERE student_id = " + id + ";"
+		;
+		try {
+			try (
+				java.sql.ResultSet sql_result =
+					CourseSelectionSystem.get_statement().executeQuery(sql)
+			) {
+				return sql_result.next();
+			}
+		} catch (SQLException ex) {
+			CourseSelectionSystem.send_message("Unable to inquire.");
+			System.exit(-1);
+		}
+		return true;
+	}
+	
+	public boolean exist() {
+		return exist_id(get_id());
 	}
 	
 	public void select_course(Course course) {
@@ -138,6 +182,43 @@ public class Student {
 		} catch (SQLException ex) {
 			CourseSelectionSystem.send_message("Unable to deselect course.");
 		}
+	}
+	
+	public void delete_student() {
+		String sql1 = "DELETE FROM students WHERE student_id = " + get_id() + ";";
+		String sql2 =
+			"DELETE FROM selections WHERE student_id = " + get_id() + ";"
+		;
+		try {
+			CourseSelectionSystem.get_statement().execute(sql1);
+			CourseSelectionSystem.get_statement().execute(sql2);
+		} catch (SQLException ex) {
+			CourseSelectionSystem.send_message("Unable to delete.");
+			System.exit(-1);
+		}
+		m_id = -1;
+	}
+	
+	public static String display_info_header(boolean show_password) {
+		String result =
+			String.format("%1$-13s", "ID") +
+			String.format("%1$-13s", "Name")
+		;
+		if (show_password) {
+			result += String.format("%1$-17s", "Password");
+		}
+		return result;
+	}
+	
+	public String display_info_on_cmd(boolean show_password) {
+		String result =
+			String.format("%1$-13s", String.valueOf(get_id())) +
+			String.format("%1$-13s", get_name())
+		;
+		if (show_password) {
+			result += String.format("%1$-17s", String.valueOf(get_password()));
+		}
+		return result;
 	}
 	
 }

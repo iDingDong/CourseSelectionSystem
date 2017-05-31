@@ -143,6 +143,8 @@ public class CourseSelectionSystem {
 				break;
 				
 				case admin:
+				AdminEntry admin_entry = new AdminEntry();
+				admin_entry.run();
 				break;
 				
 				default:
