@@ -35,7 +35,7 @@ public class StudentEntry {
 	}
 	
 	public static interface ViewTimetableHandler {
-		public abstract Course handle(List<Course> all_courses);
+		public abstract Course handle(Student user);
 	}
 	
 	public static interface ViewCoursesHandler {
@@ -161,7 +161,7 @@ public class StudentEntry {
 			Course selected;
 			if (s_view_timetable_handler != null) {
 				selected = s_view_timetable_handler.handle(
-					Course.get_all_courses()
+					get_user()
 				);
 			} else {
 				CourseSelectionSystem.send_cmd_message(

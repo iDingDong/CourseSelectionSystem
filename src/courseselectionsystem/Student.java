@@ -121,6 +121,10 @@ public class Student {
 			CourseSelectionSystem.send_message("Course already full.");
 			return;
 		}
+		if (selectable(course)) {
+			CourseSelectionSystem.send_message("Schedule already occupied.");
+			return;
+		}
 		String sql =
 			"SELECT * FROM selections WHERE course_id = " +
 			course.get_id() +
@@ -197,6 +201,51 @@ public class Student {
 			System.exit(-1);
 		}
 		m_id = -1;
+	}
+	
+	public Course find_course_by_time(
+		int week_of_term, int day_of_week, int lesson_of_day
+	) {
+		Course result = null;
+		String sql =
+			"SELECT course_id FROM courses, lessons, selections WHERE" +
+			" selections.student_id = " + get_id() +
+			" AND courses.course_id = selections.course_id"+
+			" AND courses.course_id = lessons.course_id" +
+			" AND courses.begin_week <= " + week_of_term +
+			" AND courses.end_week >= " + week_of_term +
+			" AND lessons.day_of_week = " + day_of_week +
+			" AND lessons.lesson_of_day = " + lesson_of_day + ";"
+		;
+		try {
+			try (
+				java.sql.ResultSet sql_result =
+					CourseSelectionSystem.get_statement().executeQuery(sql)
+			) {
+				if (sql_result.next()) {
+					result = new Course(sql_result.getLong(1));
+				}
+			}
+		} catch (SQLException ex) {
+			CourseSelectionSystem.send_message("Unable to inquire.");
+		}
+		return result;
+	}
+	
+	public boolean selectable(Course course) {
+		List<Course.Lesson> lessons = course.get_lessons();
+		for (int i = course.get_begin_week(); i <= course.get_end_week(); ++i) {
+			for (Course.Lesson lesson : lessons) {
+				if (
+					find_course_by_time(
+						i, lesson.day_of_week, lesson.lesson_of_day
+					) != null
+				) {
+					return false;
+				}
+			}
+		}
+		return true;
 	}
 	
 	public static String display_info_header(boolean show_password) {

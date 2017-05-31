@@ -380,6 +380,7 @@ public class TeacherEntry {
 	private void modify_course_impl(
 		Course course, CourseInfo info
 	) {
+		/*
 		if (
 			course.check_new_id(info.id) &&
 			course.check_new_name(info.name) &&
@@ -396,6 +397,9 @@ public class TeacherEntry {
 			);
 			course.set_lessons(info.lessons);
 		}
+		*/
+		course.delete_course();
+		add_course_impl(info);
 	}
 	
 }
