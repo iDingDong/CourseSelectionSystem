@@ -7,6 +7,7 @@ package courseselectionsystem;
 
 import java.util.Scanner;
 import courseselectionUI.*;
+import courseselectionUI.LoginPage.StudentLoginPageController;
 /**
  *
  * @author 堃
@@ -36,6 +37,7 @@ public class CourseSelectionSystem {
 	
 	public static void init_ui() {
             register_entry_selection_handler(new courseselectionUI.UIController());
+            StudentEntry.register_login_handler(new StudentLoginPageController());
 	}
 	
 	public static void register_message_handler(MessageHandler handler) {
@@ -73,7 +75,7 @@ public class CourseSelectionSystem {
 	 */
 	public static void main(String[] args) {
 		System.out.println("begin");
-		//init_ui();
+		init_ui();
 		try {
 			Class.forName("com.mysql.jdbc.Driver");
 			s_connection = java.sql.DriverManager.getConnection(

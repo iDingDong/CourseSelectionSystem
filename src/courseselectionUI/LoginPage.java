@@ -6,6 +6,8 @@
 package courseselectionUI;
 //import java.awt.event.*;
 
+import courseselectionsystem.*;
+import java.util.Arrays;
 import javax.swing.*;
 import javax.swing.SwingUtilities;
 import javax.swing.event.CaretEvent;
@@ -15,6 +17,32 @@ import javax.swing.event.CaretListener;
  * @author SilentLamb
  */
 public class LoginPage extends javax.swing.JFrame {
+    public static class StudentLoginPageController  implements StudentEntry.LoginHandler{
+        LoginPage loginpage;
+        
+        @Override
+        public StudentEntry.UserInfo handle(){
+            loginpage.setVisible(true);
+            UIController.wait_until_notified();
+            StudentEntry.UserInfo result = new StudentEntry.UserInfo();
+            result.id = loginpage.user_info.id;
+            result.password = loginpage.user_info.password;
+            return result;
+        }
+        public StudentLoginPageController(){
+        
+            loginpage = new LoginPage();
+            loginpage.setVisible(false);
+        }
+
+        
+
+        
+
+        
+    
+    
+}
 
     /**
      * Creates new form LoginPage
@@ -120,12 +148,17 @@ public class LoginPage extends javax.swing.JFrame {
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         // TODO add your handling code here:
-        /*
-        TeacherEntry.UserInfo userinfo = new TeacherEntry.UserInfo();
-        userinfo.id = Long.parseLong(TxtUsername.getText());
-        userinfo.password = String.valueOf(TxtUserpassword.getPassword());
-        userinfo.usertype = UserType.getSelectedItem().toString();
-        */
+        if (TxtUsername.getText().length() < 12){
+            JOptionPane.showMessageDialog(this, "请输入12位有效账号", "提示", JOptionPane.INFORMATION_MESSAGE);
+        }
+        else if(Arrays.toString(TxtUserpassword.getPassword()).length() > 16){
+            JOptionPane.showMessageDialog(this, "请输入16位以内的有效密码", "提示", JOptionPane.INFORMATION_MESSAGE);
+        }
+        else{
+            user_info.id = Long.valueOf(TxtUsername.getText());
+            user_info.password = String.valueOf(TxtUserpassword.getPassword());
+            UIController.wake_up();
+        }
         
     }//GEN-LAST:event_jButton1ActionPerformed
 
@@ -136,37 +169,7 @@ public class LoginPage extends javax.swing.JFrame {
     /**
      * @param args the command line arguments
      */
-    public static void main(String args[]) {
-        /* Set the Nimbus look and feel */
-        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-         */
-        try {
-            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
-                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-                    break;
-                }
-            }
-        } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(LoginPage.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(LoginPage.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(LoginPage.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(LoginPage.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        }
-        //</editor-fold>
-
-        /* Create and display the form */
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                new LoginPage().setVisible(true);
-            }
-        });
-    }
+    
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel MsgPassword;
@@ -176,6 +179,11 @@ public class LoginPage extends javax.swing.JFrame {
     private javax.swing.JButton jButton1;
     private javax.swing.JPanel jPanel1;
     // End of variables declaration//GEN-END:variables
+    private final UserInfo user_info = new UserInfo();
+    private class UserInfo{
+        public long id;
+        public String password;
+    }
 }
 /*
 class MyFocusListener implements FocusListener {
@@ -223,25 +231,20 @@ class TextFieldInputListener implements CaretListener {
         if (!(ch >= '0' && ch <= '9'  )) {
             
             JOptionPane.showMessageDialog(textField, "只能输入数字", "提示", JOptionPane.INFORMATION_MESSAGE);
-            SwingUtilities.invokeLater(new Runnable() {
-                @Override
-                public void run() {
-                    // 去掉 JTextField 中的末尾字符
-                    textField.setText(text.substring(0, text.length() - 1));
-                }
+            SwingUtilities.invokeLater(() -> {
+                // 去掉 JTextField 中的末尾字符
+                textField.setText(text.substring(0, text.length() - 1));
             });
             
         }
         else if(text.length() > 12){
             JOptionPane.showMessageDialog(textField, "只能输入12位", "提示", JOptionPane.INFORMATION_MESSAGE);
-            SwingUtilities.invokeLater(new Runnable() {
-                @Override
-                public void run() {
-                    // 去掉 JTextField 中的末尾字符
-                    textField.setText(text.substring(0, text.length() - 1));
-                }
+            SwingUtilities.invokeLater(() -> {
+                // 去掉 JTextField 中的末尾字符
+                textField.setText(text.substring(0, text.length() - 1));
             });
         }
     }
+    
  
 }
