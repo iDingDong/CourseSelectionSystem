@@ -5,13 +5,14 @@
  */
 package courseselectionUI;
 import courseselectionsystem.*;
+import javax.swing.JOptionPane;
 
 
 /**
  *
  * @author SilentLamb
  */
-public class UIController  implements CourseSelectionSystem.EntrySelectionHandler {
+public class UIController  implements CourseSelectionSystem.EntrySelectionHandler,CourseSelectionSystem.MessageHandler {
     UserTypeSelectPage usertypeselectpage;
     CourseSelectionSystem.Entry entry = CourseSelectionSystem.Entry.unknown;
    
@@ -32,7 +33,7 @@ public class UIController  implements CourseSelectionSystem.EntrySelectionHandle
             @Override
             public void run(){
                 //for (;;){
-                    System.out.println("查看有没有按下");
+                    //System.out.println("查看有没有按下");
                     entry = usertypeselectpage.get_entry();
                     try{
                        Thread.sleep(10);
@@ -43,16 +44,24 @@ public class UIController  implements CourseSelectionSystem.EntrySelectionHandle
             }
             
         }).start();
-            System.out.println("按下了没");
+            //System.out.println("按下了没");
             if(entry !=  CourseSelectionSystem.Entry.unknown){
                 
-                System.out.println("返回了");
+                //System.out.println("返回了");
                 usertypeselectpage.setVisible(false);
                 //usertypeselectpage.setVisible(false);
                 return entry;
             }
         }
         
+    }
+    
+    @Override
+    public void handle(String message){
+        Object[] options = { "OK", "CANCEL" }; 
+        JOptionPane.showOptionDialog(null, message, "Warning", 
+            JOptionPane.DEFAULT_OPTION, JOptionPane.WARNING_MESSAGE, 
+            null, options, options[0]); 
     }
     
 }
