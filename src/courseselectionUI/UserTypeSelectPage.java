@@ -14,20 +14,19 @@ import javax.swing.JOptionPane;
  */
 public class UserTypeSelectPage extends javax.swing.JFrame {
     public CourseSelectionSystem.Entry get_entry(){
-        for (; ; ){
-            if (usertype == "student"){
-                this.setVisible(false);
+        if (usertype == "student"){
                 return CourseSelectionSystem.Entry.student;
             }
             else if (usertype == "teacher") {
-                this.setVisible(false);
                 return CourseSelectionSystem.Entry.teacher;
             }
             else if (usertype == "admin") {
-                this.setVisible(false);
                 return CourseSelectionSystem.Entry.admin;
             }
-        }
+            else{
+                return CourseSelectionSystem.Entry.unknown;
+            }
+
     }
     
 
