@@ -23,6 +23,7 @@ public class StudentClient extends javax.swing.JFrame {
         public  StudentEntry.Function handle(Student user){
             student_client.setVisible(true);
             UIController.wait_until_notified();
+            student_client.setVisible(false);
             return student_client.get_function();
         }
         public StudentClientController(){
