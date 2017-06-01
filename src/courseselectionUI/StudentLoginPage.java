@@ -16,9 +16,9 @@ import javax.swing.event.CaretListener;
  *
  * @author SilentLamb
  */
-public class LoginPage extends javax.swing.JFrame {
-    public static class StudentLoginPageController  implements StudentEntry.LoginHandler{
-        LoginPage loginpage;
+public class StudentLoginPage extends javax.swing.JFrame {
+    public static class StudentLoginPageController  implements StudentEntry.LoginHandler {
+        StudentLoginPage loginpage;
         
         @Override
         public StudentEntry.UserInfo handle(){
@@ -34,9 +34,24 @@ public class LoginPage extends javax.swing.JFrame {
             loginpage.TxtUserpassword.setText("");
             return result;
         }
+//        @Override
+//        public TeacherEntry.UserInfo handle(){
+//            loginpage.setVisible(true);
+//            loginpage.TxtUsername.setText("");
+//            loginpage.TxtUserpassword.setText("");
+//            UIController.wait_until_notified();
+//            StudentEntry.UserInfo result = new StudentEntry.UserInfo();
+//            result.id = loginpage.user_info.id;
+//            result.password = loginpage.user_info.password;
+//            loginpage.setVisible(false);
+//            loginpage.TxtUsername.setText("");
+//            loginpage.TxtUserpassword.setText("");
+//            return result;
+//        }
+        
         public StudentLoginPageController(){
         
-            loginpage = new LoginPage();
+            loginpage = new StudentLoginPage();
             loginpage.setVisible(false);
         }
 
@@ -52,7 +67,7 @@ public class LoginPage extends javax.swing.JFrame {
     /**
      * Creates new form LoginPage
      */
-    public LoginPage() {
+    public StudentLoginPage() {
         initComponents();
         String info1 = "请输入 [账号]";
  //       TxtUsername.addFocusListener(new MyFocusListener(info1, TxtUsername));
@@ -215,41 +230,41 @@ class MyFocusListener implements FocusListener {
 }
 */
 
-class TextFieldInputListener implements CaretListener {
-    //JLabel msglabel;
-    
-    /*
-    public TextFieldInputListener(JLabel label1){
-        msglabel = label1;
-        
-    }
-*/
- 
-    @Override
-    public void caretUpdate(CaretEvent e) {
-        JTextField textField = (JTextField) e.getSource(); // 获得触发事件的 JTextField
-        String text = textField.getText();
-        if (text.length() == 0) {
-            return;
-        }
-        char ch = text.charAt(text.length() - 1);
-        if (!(ch >= '0' && ch <= '9'  )) {
-            
-            JOptionPane.showMessageDialog(textField, "只能输入数字", "提示", JOptionPane.INFORMATION_MESSAGE);
-            SwingUtilities.invokeLater(() -> {
-                // 去掉 JTextField 中的末尾字符
-                textField.setText(text.substring(0, text.length() - 1));
-            });
-            
-        }
-        else if(text.length() > 12){
-            JOptionPane.showMessageDialog(textField, "只能输入12位", "提示", JOptionPane.INFORMATION_MESSAGE);
-            SwingUtilities.invokeLater(() -> {
-                // 去掉 JTextField 中的末尾字符
-                textField.setText(text.substring(0, text.length() - 1));
-            });
-        }
-    }
-    
- 
-}
+//class TextFieldInputListener implements CaretListener {
+//    //JLabel msglabel;
+//    
+//    /*
+//    public TextFieldInputListener(JLabel label1){
+//        msglabel = label1;
+//        
+//    }
+//*/
+// 
+//    @Override
+//    public void caretUpdate(CaretEvent e) {
+//        JTextField textField = (JTextField) e.getSource(); // 获得触发事件的 JTextField
+//        String text = textField.getText();
+//        if (text.length() == 0) {
+//            return;
+//        }
+//        char ch = text.charAt(text.length() - 1);
+//        if (!(ch >= '0' && ch <= '9'  )) {
+//            
+//            JOptionPane.showMessageDialog(textField, "只能输入数字", "提示", JOptionPane.INFORMATION_MESSAGE);
+//            SwingUtilities.invokeLater(() -> {
+//                // 去掉 JTextField 中的末尾字符
+//                textField.setText(text.substring(0, text.length() - 1));
+//            });
+//            
+//        }
+//        else if(text.length() > 12){
+//            JOptionPane.showMessageDialog(textField, "只能输入12位", "提示", JOptionPane.INFORMATION_MESSAGE);
+//            SwingUtilities.invokeLater(() -> {
+//                // 去掉 JTextField 中的末尾字符
+//                textField.setText(text.substring(0, text.length() - 1));
+//            });
+//        }
+//    }
+//    
+// 
+//}
