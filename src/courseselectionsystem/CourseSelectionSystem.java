@@ -8,8 +8,9 @@ package courseselectionsystem;
 import java.util.Scanner;
 import courseselectionUI.*;
 import courseselectionUI.CourseSelectForm.CourseSelectionController;
-import courseselectionUI.LoginPage.StudentLoginPageController;
+import courseselectionUI.StudentLoginPage.StudentLoginPageController;
 import courseselectionUI.StudentClient.StudentClientController;
+import courseselectionUI.TeacherLoginPage.TeacherLoginPageController;
 import courseselectionUI.ViewScheduleUI.ViewScheduleUIController;
 import static courseselectionsystem.StudentEntry.register_view_courses_handler;
 /**
@@ -46,6 +47,7 @@ public class CourseSelectionSystem {
             StudentEntry.register_function_choice_handler(new StudentClientController());
             register_view_courses_handler(new CourseSelectionController());
             StudentEntry.register_view_timetable_handler(new ViewScheduleUIController());
+            TeacherEntry.register_login_handler(new TeacherLoginPageController());
             
 	}
 	
