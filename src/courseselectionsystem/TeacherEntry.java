@@ -46,7 +46,7 @@ public class TeacherEntry {
 	}
 	
 	public static interface ActionHandler {
-		public abstract Action handle(List<Course> courses);
+		public abstract Action handle(Teacher user);
 	}
 	
 	public static interface AddCourseHandler {
@@ -124,9 +124,7 @@ public class TeacherEntry {
 		Action action;
 		for (; ; ) {
 			if (s_action_handler != null) {
-				action = s_action_handler.handle(
-					get_user().get_courses()
-				);
+				action = s_action_handler.handle(get_user());
 			} else {
 				action = new Action();
 				Course.display_info_header();
