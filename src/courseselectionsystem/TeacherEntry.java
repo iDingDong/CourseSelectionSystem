@@ -37,8 +37,8 @@ public class TeacherEntry {
 	}
 	
 	public static class Action {
-		Function function_choice;
-		Course course;
+		public Function function_choice;
+		public Course course;
 	}
 
 	public static interface LoginHandler {

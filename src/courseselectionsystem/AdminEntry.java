@@ -43,13 +43,13 @@ public class AdminEntry {
 	}
 	
 	public static class TAction {
-		Choice choice;
-		Teacher teacher;
+		public Choice choice;
+		public Teacher teacher;
 	}
 	
 	public static class SAction {
-		Choice choice;
-		Student student;
+		public Choice choice;
+		public Student student;
 	}
 	
 	public static interface LoginHandler {
