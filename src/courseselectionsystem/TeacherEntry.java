@@ -54,7 +54,7 @@ public class TeacherEntry {
 	}
 	
 	public static interface ModifyCourseHandler {
-		public abstract void handle(CourseInfo info);
+		public abstract boolean handle(CourseInfo info);
 	}
 	
 	private Teacher m_user;
@@ -266,7 +266,11 @@ public class TeacherEntry {
 				info.lessons.add(lesson);
 			}
 		}
+		if (info == null) {
+			return;
+		}
 		add_course_impl(info);
+		CourseSelectionSystem.send_message("Course added.");
 	}
 	
 	private void add_course_impl(CourseInfo info) {
@@ -323,8 +327,9 @@ public class TeacherEntry {
 		info.begin_week = course.get_begin_week();
 		info.end_week = course.get_end_week();
 		info.lessons = course.get_lessons();
+		boolean apply;
 		if (s_modify_course_handler != null) {
-			s_modify_course_handler.handle(info);
+			apply = s_modify_course_handler.handle(info);
 		} else {
 			CourseSelectionSystem.send_cmd_message("ID: ");
 			info.id = Long.valueOf(
@@ -371,8 +376,11 @@ public class TeacherEntry {
 				lesson.lesson_of_day = Integer.valueOf(input);
 				info.lessons.add(lesson);
 			}
+			apply = true;
 		}
-		modify_course_impl(course, info);
+		if (apply) {
+			modify_course_impl(course, info);
+		}
 	}
 	
 	private void modify_course_impl(
@@ -398,6 +406,7 @@ public class TeacherEntry {
 		*/
 		course.delete_course();
 		add_course_impl(info);
+		CourseSelectionSystem.send_message("Modification succeeded.");
 	}
 	
 }
