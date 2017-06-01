@@ -138,7 +138,7 @@ public class Student {
 					);
 					return;
 				}
-                                if (selectable(course)) {
+                                if (!selectable(course)) {
                                         CourseSelectionSystem.send_message("Schedule already occupied.");
                                         return;
                                 }
