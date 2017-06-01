@@ -138,10 +138,10 @@ public class Student {
 					);
 					return;
 				}
-                                if (!selectable(course)) {
-                                        CourseSelectionSystem.send_message("Schedule already occupied.");
-                                        return;
-                                }
+				if (!selectable(course)) {
+					CourseSelectionSystem.send_message("Schedule already occupied.");
+					return;
+				}
 				sql =
 					"INSERT INTO selections VALUES(" +
 					course.get_id() +
@@ -150,6 +150,7 @@ public class Student {
 					");"
 				;
 				CourseSelectionSystem.get_statement().execute(sql);
+				CourseSelectionSystem.send_message("Selection succeeded.");
 			}
 		} catch (SQLException ex) {
 			CourseSelectionSystem.send_message("Unable to select course.");
