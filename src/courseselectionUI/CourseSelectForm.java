@@ -32,8 +32,9 @@ public class CourseSelectForm extends javax.swing.JFrame {
                 Vector newRow = new Vector();
                 newRow.add(String.valueOf(all_courses.get(i).get_id()));
                 newRow.add(all_courses.get(i).get_name());
-                newRow.add(all_courses.get(i).get_name());
+                newRow.add(all_courses.get(i).get_teacher().get_name());
                 newRow.add(new String(all_courses.get(i).get_begin_week() + "-" + all_courses.get(i).get_end_week()));
+                newRow.add(new String(all_courses.get(i).get_student_count() + "/" + all_courses.get(i).get_capacity()));
                 selectedTableModel.addRow(newRow);
             }
             UIController.wait_until_notified();
@@ -111,11 +112,11 @@ public class CourseSelectForm extends javax.swing.JFrame {
 
             },
             new String [] {
-                "课程号", "课程名称", "任课老师", "课程余量"
+                "课程号", "课程名称", "任课老师", "上课时间", "课余量"
             }
         ) {
             boolean[] canEdit = new boolean [] {
-                false, false, false, false
+                false, false, false, false, false
             };
 
             public boolean isCellEditable(int rowIndex, int columnIndex) {
@@ -129,6 +130,7 @@ public class CourseSelectForm extends javax.swing.JFrame {
             jTable3.getColumnModel().getColumn(1).setResizable(false);
             jTable3.getColumnModel().getColumn(2).setResizable(false);
             jTable3.getColumnModel().getColumn(3).setResizable(false);
+            jTable3.getColumnModel().getColumn(4).setResizable(false);
         }
 
         jButton3.setText("返回");
