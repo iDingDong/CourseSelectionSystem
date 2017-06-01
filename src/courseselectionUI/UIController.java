@@ -50,7 +50,9 @@ public class UIController  implements CourseSelectionSystem.EntrySelectionHandle
         
         wait_until_notified();
         entry = usertypeselectpage.get_entry();
-
+        if(entry == CourseSelectionSystem.Entry.exit_system){
+            System.exit(0);
+        }
         //System.out.println("返回了");
         usertypeselectpage.setVisible(false);
         return entry;

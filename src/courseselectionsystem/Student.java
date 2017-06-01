@@ -120,11 +120,7 @@ public class Student {
 		if (course.is_full()) {
 			CourseSelectionSystem.send_message("Course already full.");
 			return;
-		}
-		if (selectable(course)) {
-			CourseSelectionSystem.send_message("Schedule already occupied.");
-			return;
-		}
+                }
 		String sql =
 			"SELECT * FROM selections WHERE course_id = " +
 			course.get_id() +
@@ -142,6 +138,10 @@ public class Student {
 					);
 					return;
 				}
+                                if (selectable(course)) {
+                                        CourseSelectionSystem.send_message("Schedule already occupied.");
+                                        return;
+                                }
 				sql =
 					"INSERT INTO selections VALUES(" +
 					course.get_id() +
@@ -208,7 +208,7 @@ public class Student {
 	) {
 		Course result = null;
 		String sql =
-			"SELECT course_id FROM courses, lessons, selections WHERE" +
+			"SELECT courses.course_id FROM courses, lessons, selections WHERE" +
 			" selections.student_id = " + get_id() +
 			" AND courses.course_id = selections.course_id"+
 			" AND courses.course_id = lessons.course_id" +

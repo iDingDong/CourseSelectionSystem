@@ -39,10 +39,12 @@ public class CourseSelectionSystem {
 	private static java.sql.Statement s_statement;
 	
 	public static void init_ui() {
-            register_entry_selection_handler(new courseselectionUI.UIController());
+            register_message_handler(new UIController());
+            register_entry_selection_handler(new UIController());
             StudentEntry.register_login_handler(new StudentLoginPageController());
             StudentEntry.register_function_choice_handler(new StudentClientController());
             register_view_courses_handler(new CourseSelectionController());
+            
 	}
 	
 	public static void register_message_handler(MessageHandler handler) {
