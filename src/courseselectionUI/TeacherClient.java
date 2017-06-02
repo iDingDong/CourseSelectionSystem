@@ -201,6 +201,7 @@ public class TeacherClient extends javax.swing.JFrame {
     private void LogoutButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_LogoutButtonActionPerformed
         // TODO add your handling code here:
         action.function_choice = TeacherEntry.Function.exit_entry;
+        action.course = null;
         UIController.wake_up();
     }//GEN-LAST:event_LogoutButtonActionPerformed
 
@@ -219,8 +220,8 @@ public class TeacherClient extends javax.swing.JFrame {
         Long selected_course_id = Long.valueOf(String.valueOf(selectedTableModel.getValueAt(selectedRow,0)));
         for (int i = 0;i < this.courses.size();i++){
             if (this.courses.get(i).get_id() == selected_course_id){
-                this.selected_course = courses.get(i);
-                action.function_choice = TeacherEntry.Function.add_course;
+                action.course = courses.get(i);
+                action.function_choice = TeacherEntry.Function.delete_course;
                 break;
             }
         }
