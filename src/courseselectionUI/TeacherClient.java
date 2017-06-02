@@ -207,11 +207,13 @@ public class TeacherClient extends javax.swing.JFrame {
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         // TODO add your handling code here:
         action.function_choice = TeacherEntry.Function.add_course;
+        UIController.wake_up();
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
         // TODO add your handling code here:
         int selectedRow = jTable1.getSelectedRow();
+        action.function_choice = TeacherEntry.Function.delete_course;
         javax.swing.table.DefaultTableModel selectedTableModel = (javax.swing.table.DefaultTableModel)this.jTable1.getModel();
         
         Long selected_course_id = Long.valueOf(String.valueOf(selectedTableModel.getValueAt(selectedRow,0)));
