@@ -10,6 +10,7 @@ import courseselectionUI.*;
 import courseselectionUI.CourseSelectForm.CourseSelectionController;
 import courseselectionUI.StudentLoginPage.StudentLoginPageController;
 import courseselectionUI.StudentClient.StudentClientController;
+import courseselectionUI.TeacherClient.TeacherClientUIController;
 import courseselectionUI.TeacherLoginPage.TeacherLoginPageController;
 import courseselectionUI.ViewScheduleUI.ViewScheduleUIController;
 import static courseselectionsystem.StudentEntry.register_view_courses_handler;
@@ -48,7 +49,7 @@ public class CourseSelectionSystem {
             register_view_courses_handler(new CourseSelectionController());
             StudentEntry.register_view_timetable_handler(new ViewScheduleUIController());
             TeacherEntry.register_login_handler(new TeacherLoginPageController());
-            
+            TeacherEntry.register_function_choice_handler(new TeacherClientUIController());
 	}
 	
 	public static void register_message_handler(MessageHandler handler) {

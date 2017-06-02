@@ -223,8 +223,9 @@ public class CourseSelectForm extends javax.swing.JFrame {
                 Vector newRow = new Vector();
                 newRow.add(String.valueOf(all_courses.get(i).get_id()));
                 newRow.add(all_courses.get(i).get_name());
-                newRow.add(all_courses.get(i).get_name());
+                newRow.add(all_courses.get(i).get_teacher().get_name());
                 newRow.add(new String(all_courses.get(i).get_begin_week() + "-" + all_courses.get(i).get_end_week()));
+                newRow.add(new String(all_courses.get(i).get_student_count() + "/" + all_courses.get(i).get_capacity()));
                 selectedTableModel.addRow(newRow);
             }
         }
@@ -235,8 +236,9 @@ public class CourseSelectForm extends javax.swing.JFrame {
                     Vector newRow = new Vector();
                     newRow.add(String.valueOf(all_courses.get(i).get_id()));
                     newRow.add(all_courses.get(i).get_name());
-                    newRow.add(all_courses.get(i).get_name());
+                    newRow.add(all_courses.get(i).get_teacher().get_name());
                     newRow.add(new String(all_courses.get(i).get_begin_week() + "-" + all_courses.get(i).get_end_week()));
+                    newRow.add(new String(all_courses.get(i).get_student_count() + "/" + all_courses.get(i).get_capacity()));
                     selectedTableModel.addRow(newRow);
                 }
             }
